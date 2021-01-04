@@ -18,9 +18,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun init(){
         navController = Navigation.findNavController(this,R.id.frag_empty)
-
-        //navController = NavHostController(this)
-        //navController.navigate(R.id.emptyFragment)
     }
 
 }
