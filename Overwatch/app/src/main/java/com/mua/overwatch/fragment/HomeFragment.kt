@@ -1,6 +1,7 @@
 package com.mua.overwatch.fragment
 
 import android.app.usage.UsageEvents
+import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.pm.ApplicationInfo
@@ -65,12 +66,28 @@ class HomeFragment : Fragment() {
         val manager: UsageStatsManager
                 = context?.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
 
+
+        val mUsageStatsManager = context?.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+
+
         val timeNow = System.currentTimeMillis()
         val cal: Calendar = Calendar.getInstance()
         cal.set(Calendar.HOUR_OF_DAY, 0)
         cal.set(Calendar.MINUTE, 0)
         cal.set(Calendar.SECOND, 0)
         cal.set(Calendar.MILLISECOND, 0)
+
+
+
+        val stats: List<UsageStats> = mUsageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_BEST,
+                cal.getTimeInMillis(), System.currentTimeMillis())
+
+        for(usageStat in stats){
+
+            //viewModel.insert(AppUsage(appId,appName, Date(0),0,image))
+            //viewModel.insert(AppUsage(usageStat.packageName," ", Date(0),0,))
+            Log.d("d--mua", usageStat.packageName+" "+usageStat.totalTimeInForeground)
+        }
 
         val range: LongArray = longArrayOf(cal.getTimeInMillis(), timeNow)
         val events = manager.queryEvents(range[0],range[1])
@@ -79,7 +96,7 @@ class HomeFragment : Fragment() {
         while (events.hasNextEvent()){
             events.getNextEvent(event)
             if(event.eventType==UsageEvents.Event.ACTIVITY_RESUMED){
-                Log.d("d--mua",event.packageName+" "+Date(event.timeStamp).toGMTString()+" ")
+                Log.d("d--mua",event.packageName+" "+Date(event.timeStamp).toGMTString()+" "+event)
                 val diff = System.currentTimeMillis().toInt() - event.getTimeStamp()
                 Log.d("d--mua",diff.toString())
             }
