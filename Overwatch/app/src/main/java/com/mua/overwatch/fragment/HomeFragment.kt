@@ -1,14 +1,19 @@
 package com.mua.overwatch.fragment
 
+import android.app.usage.UsageEvents
+import android.app.usage.UsageStatsManager
+import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -23,6 +28,7 @@ import com.mua.overwatch.entity.AppUsage
 import com.mua.overwatch.viewmodel.HomeViewModel
 import java.io.ByteArrayOutputStream
 import java.sql.Date
+import java.util.*
 
 
 class HomeFragment : Fragment() {
@@ -49,6 +55,35 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         init()
         getAllInstalledApplication()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getUsage()
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun getUsage(){
+        val manager: UsageStatsManager
+                = context?.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+
+        val timeNow = System.currentTimeMillis()
+        val cal: Calendar = Calendar.getInstance()
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+
+        val range: LongArray = longArrayOf(cal.getTimeInMillis(), timeNow)
+        val events = manager.queryEvents(range[0],range[1])
+        val event: UsageEvents.Event = UsageEvents.Event()
+
+        while (events.hasNextEvent()){
+            events.getNextEvent(event)
+            if(event.eventType==UsageEvents.Event.ACTIVITY_RESUMED){
+                Log.d("d--mua",event.packageName+" "+Date(event.timeStamp).toGMTString()+" ")
+                val diff = System.currentTimeMillis().toInt() - event.getTimeStamp()
+                Log.d("d--mua",diff.toString())
+            }
+        }
     }
 
     private fun getAllInstalledApplication(){
