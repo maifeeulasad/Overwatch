@@ -66,6 +66,10 @@ class HomeFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
+        mBinding.ibSortDirection.setOnClickListener {
+            appUsageListAdapter.reverseSortDirection()
+        }
+
         viewModel.getLast24Hours(requireContext(), requireActivity())
 
         viewModel.appUsageList.observe(mBinding.lifecycleOwner!!, Observer {

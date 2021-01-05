@@ -28,6 +28,9 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
     private List<AppUsage> appUsageList = new ArrayList<>();
     private final Context context;
 
+    private int sortDirection = 1;
+    private String lastSortedBy = "Name";
+
     public AppUsageListAdapter(Context context) {
         this.context = context;
     }
@@ -76,11 +79,18 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
         holder.icon.setImageDrawable(icon);
     }
 
+    public void reverseSortDirection(){
+        sortDirection *= -1;
+        sortBy(lastSortedBy);
+    }
+
     public void sortBy(String by){
+        lastSortedBy = by;
         List<String> items = Arrays.asList("Name", "Usage");
         if (by.equals(items.get(0))){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                appUsageList.sort((d1, d2) -> d1.getAppName().toLowerCase().compareTo(d2.getAppName().toLowerCase()));
+                appUsageList.sort((d1, d2) ->
+                        sortDirection * d1.getAppName().toLowerCase().compareTo(d2.getAppName().toLowerCase()));
             }
         } else if (by.equals(items.get(1))){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
@@ -88,9 +98,9 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
                     if (d1.getDuration().equals(d2.getDuration()))
                         return 0;
                     else if (d1.getDuration() < d2.getDuration())
-                        return 1;
+                        return 1 * sortDirection;
                     else
-                        return -1;
+                        return -1 * sortDirection;
                 });
             }
         }
