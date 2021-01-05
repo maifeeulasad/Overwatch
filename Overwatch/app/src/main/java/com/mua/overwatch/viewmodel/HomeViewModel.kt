@@ -31,8 +31,20 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    public fun mapToDb(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            apps.forEach { t, u ->
+                Log.d("d--mua--l",t)
+                Log.d("d--mua--l",u.seconds.toString())
+                insert(u)
+            }
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    public fun queryUsageStatistics(context: Context, startTime: Long, endTime: Long): HashMap<String, AppUsage?>? {
+    public fun queryUsageStatistics(context: Context, startTime: Long, endTime: Long)
+            //: HashMap<String, AppUsage?>?
+    {
         var currentEvent: UsageEvents.Event
         val allEvents: MutableList<UsageEvents.Event> = ArrayList()
         val map: HashMap<String, AppUsage?> = HashMap<String, AppUsage?>()
@@ -70,11 +82,15 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     (event1.eventType == UsageEvents.Event.ACTIVITY_PAUSED || event1.eventType == UsageEvents.Event.ACTIVITY_STOPPED)
                     && event0.packageName == event1.packageName) {
                 val diff = event1.timeStamp - event0.timeStamp
-                Objects.requireNonNull(map[event0.packageName])!!.seconds += diff
+                //Objects.requireNonNull(map[event0.packageName])!!.seconds += diff
+                if(apps.containsKey(event0.packageName)){
+                    Objects.requireNonNull(apps[event0.packageName])!!.seconds += diff
+                    //apps[event0.packageName]!!.seconds += diff
+                }
             }
         }
         // and return the map.
-        return map
+        //return map
     }
     
 
@@ -116,59 +132,5 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     init {
         appUsageList = appUsageRepository.appUsageList
     }
-
-
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    fun getUsageStatistics(context: Context): MutableMap<String, AppUsage> {
-
-        val currentEvent:UsageEvents.Event
-        val allEvents:MutableList<UsageEvents.Event> = ArrayList()
-        val map:MutableMap<String, AppUsage> = HashMap();
-
-        val currTime = System.currentTimeMillis();
-        val startTime = currTime - 1000*3600*3; //querying past three hours
-
-        val mUsageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-
-        val usageEvents = mUsageStatsManager.queryEvents(startTime, currTime);
-
-//capturing all events in a array to compare with next element
-
-        while (usageEvents.hasNextEvent()) {
-            val currentEvent = UsageEvents.Event();
-            usageEvents.getNextEvent(currentEvent);
-            if (currentEvent.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND ||
-                    currentEvent.getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND) {
-                allEvents.add(currentEvent);
-                val key = currentEvent.getPackageName();
-// taking it into a collection to access by package name
-                if (map.get(key)==null)
-                    map.put(key,AppUsage(key));
-            }
-        }
-
-
-        allEvents.forEachIndexed({
-            index, event ->
-            val E0=allEvents.get(index);
-            val E1=allEvents.get(index+1);
-
-            if (!E0.getPackageName().equals(E1.getPackageName()) && E1.getEventType()==1){
-                map.get(E1.getPackageName())!!.launchCount++;
-            }
-
-            if (E0.getEventType()==1 && E1.getEventType()==2
-                    && E0.getClassName().equals(E1.getClassName())){
-                val diff = E1.getTimeStamp()-E0.getTimeStamp();
-                map.get(E0.getPackageName())!!.seconds+= diff;
-            }
-        })
-
-
-        return map;
-
-    }
-    
-    
     
 }

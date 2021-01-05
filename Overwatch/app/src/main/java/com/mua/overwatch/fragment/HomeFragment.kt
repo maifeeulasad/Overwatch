@@ -54,17 +54,12 @@ class HomeFragment : Fragment() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //val res = viewModel.getUsageStatistics(requireContext())
-
-            val result = viewModel.queryUsageStatistics(
+            viewModel.getAllInstalledApplication(requireActivity())
+            viewModel.queryUsageStatistics(
                     requireContext(),
                     startCalendar.getTimeInMillis(),
                     endCalendar.getTimeInMillis())
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                result!!.forEach { t, u ->
-                    Log.d("d--mua--l",t)
-                    Log.d("d--mua--l",u!!.seconds.toString())
-                }
-            }
+            viewModel.mapToDb()
 
         } else {
             TODO("VERSION.SDK_INT < LOLLIPOP")
