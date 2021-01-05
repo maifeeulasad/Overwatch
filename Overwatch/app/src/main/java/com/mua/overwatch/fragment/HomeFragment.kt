@@ -1,12 +1,9 @@
 package com.mua.overwatch.fragment
 
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -17,10 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mua.overwatch.R
 import com.mua.overwatch.adapter.AppUsageListAdapter
 import com.mua.overwatch.databinding.FragmentHomeBinding
-import com.mua.overwatch.entity.AppUsage
 import com.mua.overwatch.viewmodel.HomeViewModel
-import java.util.*
-import kotlin.collections.HashMap
 
 
 class HomeFragment : Fragment() {
@@ -45,37 +39,20 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         init()
-        //viewModel.getAllInstalledApplication(requireActivity())
-
-        val startCalendar = Calendar.getInstance()
-        startCalendar.add(Calendar.HOUR,-10)
-        val endCalendar = Calendar.getInstance()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //val res = viewModel.getUsageStatistics(requireContext())
-            viewModel.getAllInstalledApplication(requireActivity())
-            viewModel.queryUsageStatistics(
-                    requireContext(),
-                    startCalendar.getTimeInMillis(),
-                    endCalendar.getTimeInMillis())
-            viewModel.mapToDb()
-
-        } else {
-            TODO("VERSION.SDK_INT < LOLLIPOP")
-        }
-
     }
 
 
-    private fun init(){
+    private fun init() {
         appUsageListAdapter = AppUsageListAdapter(context)
         val appUsageRecyclerView: RecyclerView = mBinding.rvUsage
         appUsageRecyclerView.adapter = appUsageListAdapter
         appUsageRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
 
+        viewModel.getLast24Hours(requireContext(), requireActivity())
+
         viewModel.appUsageList.observe(mBinding.lifecycleOwner!!, Observer {
-            Toast.makeText(requireContext(),"List has been Updated : " + it.size,Toast.LENGTH_LONG).show()
             appUsageListAdapter.setAppUsages(it)
         })
     }

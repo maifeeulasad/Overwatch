@@ -15,20 +15,24 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mua.overwatch.R;
 import com.mua.overwatch.entity.AppUsage;
 
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapter.AppUsageListViewHolder> {
-    private List<AppUsage> appUsageList;
-    private Context context;
+    private List<AppUsage> appUsageList = new ArrayList<>();
+    private final Context context;
 
     public AppUsageListAdapter(Context context) {
         this.context = context;
     }
 
     protected class AppUsageListViewHolder extends RecyclerView.ViewHolder {
-        private TextView name;
-        private TextView duration;
-        private ImageView icon;
+        private final TextView name;
+        private final TextView duration;
+        private final ImageView icon;
 
         AppUsageListViewHolder(View view) {
             super(view);
@@ -38,6 +42,7 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
         }
     }
 
+    @NotNull
     @Override
     public AppUsageListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new AppUsageListViewHolder((LayoutInflater.from(parent.getContext()))
@@ -45,31 +50,32 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
     }
 
     @Override
-    public void onBindViewHolder(AppUsageListViewHolder holder, int position) {
-        try {
-            holder.name.setText(appUsageList.get(position).getAppName());
-            holder.duration.setText(appUsageList.get(position).getSeconds().toString());
-            Drawable icon = new BitmapDrawable(context.getResources(),
-                    BitmapFactory
-                            .decodeByteArray(appUsageList.get(position).getIcon(),
-                                    0,
-                                    appUsageList.get(position).getIcon().length)
-            );
-            holder.icon.setImageDrawable(icon);
-        }
-        catch(Exception ignored) {
-
-        }
+    public void onBindViewHolder(@NotNull AppUsageListViewHolder holder, int position) {
+        holder.name.setText(appUsageList.get(position).getAppName());
+        long millis = appUsageList.get(position).getDuration();
+        long hours = TimeUnit.MILLISECONDS.toHours(millis);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(
+                TimeUnit.MILLISECONDS.toHours(millis)
+        );
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(
+                TimeUnit.MILLISECONDS.toMinutes(millis)
+        );
+        String duration = (hours != 0L ? hours + " Hours" : "")
+                + (minutes != 0L ? minutes + " Minutes" : "")
+                + seconds + " Seconds";
+        holder.duration.setText(duration);
+        Drawable icon = new BitmapDrawable(context.getResources(),
+                BitmapFactory
+                        .decodeByteArray(appUsageList.get(position).getIcon(),
+                                0,
+                                appUsageList.get(position).getIcon().length)
+        );
+        holder.icon.setImageDrawable(icon);
     }
 
     @Override
     public int getItemCount() {
-        try {
-            return appUsageList.size();
-        }
-        catch(NullPointerException n) {
-            return 0;
-        }
+        return appUsageList.size();
     }
 
     public void setAppUsages(List<AppUsage> appUsageList) {

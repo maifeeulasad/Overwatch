@@ -8,7 +8,7 @@ import android.content.pm.ApplicationInfo
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
-import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.AndroidViewModel
@@ -31,70 +31,47 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
-    public fun mapToDb(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            apps.forEach { t, u ->
-                Log.d("d--mua--l",t)
-                Log.d("d--mua--l",u.seconds.toString())
-                insert(u)
-            }
+    private fun storeInDatabase(){
+        for(entry in apps){
+            insert(entry.value)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    public fun queryUsageStatistics(context: Context, startTime: Long, endTime: Long)
-            //: HashMap<String, AppUsage?>?
-    {
-        var currentEvent: UsageEvents.Event
-        val allEvents: MutableList<UsageEvents.Event> = ArrayList()
-        val map: HashMap<String, AppUsage?> = HashMap<String, AppUsage?>()
-        val mUsageStatsManager = (context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager)
-        // Here we query the events from startTime till endTime.
-        val usageEvents = mUsageStatsManager.queryEvents(startTime, endTime)
+    private fun queryUsageStatistics(context: Context, startTime: Long, endTime: Long) {
+        val events: MutableList<UsageEvents.Event> = ArrayList()
+        val usageManager = context.getSystemService(Context.USAGE_STATS_SERVICE)
+                as UsageStatsManager
+        val usageEvents = usageManager.queryEvents(startTime, endTime)
 
-        // go over all events.
         while (usageEvents.hasNextEvent()) {
-            currentEvent = UsageEvents.Event()
+            val currentEvent = UsageEvents.Event()
             usageEvents.getNextEvent(currentEvent)
-            val packageName = currentEvent.packageName
-            if (currentEvent.eventType == UsageEvents.Event.ACTIVITY_RESUMED || currentEvent.eventType == UsageEvents.Event.ACTIVITY_PAUSED || currentEvent.eventType == UsageEvents.Event.ACTIVITY_STOPPED) {
-                allEvents.add(currentEvent) // an extra event is found, add to all events list.
-                // taking it into a collection to access by package name
-                if (!map.containsKey(packageName)) {
-                    map[packageName] = AppUsage()
-                }
+            if (currentEvent.eventType == UsageEvents.Event.ACTIVITY_RESUMED
+                || currentEvent.eventType == UsageEvents.Event.ACTIVITY_PAUSED
+                || currentEvent.eventType == UsageEvents.Event.ACTIVITY_STOPPED) {
+                events.add(currentEvent)
             }
         }
 
-        // iterate through all events.
-        for (i in 0 until allEvents.size - 1) {
-            val event0 = allEvents[i]
-            val event1 = allEvents[i + 1]
+        for (i in 0 until events.size - 1) {
+            val e0 = events[i]
+            val e1 = events[i + 1]
 
-            //for launchCount of apps in time range
-            if (event0.packageName != event1.packageName && event1.eventType == UsageEvents.Event.ACTIVITY_RESUMED) {
-                // if true, E1 (launch event of an app) app launched
-                Objects.requireNonNull(map[event1.packageName])!!.launchCount++
-            }
-
-            //for UsageTime of apps in time range
-            if (event0.eventType == UsageEvents.Event.ACTIVITY_RESUMED &&
-                    (event1.eventType == UsageEvents.Event.ACTIVITY_PAUSED || event1.eventType == UsageEvents.Event.ACTIVITY_STOPPED)
-                    && event0.packageName == event1.packageName) {
-                val diff = event1.timeStamp - event0.timeStamp
-                //Objects.requireNonNull(map[event0.packageName])!!.seconds += diff
-                if(apps.containsKey(event0.packageName)){
-                    Objects.requireNonNull(apps[event0.packageName])!!.seconds += diff
-                    //apps[event0.packageName]!!.seconds += diff
+            if (e0.eventType == UsageEvents.Event.ACTIVITY_RESUMED
+                && (e1.eventType == UsageEvents.Event.ACTIVITY_PAUSED
+                        || e1.eventType == UsageEvents.Event.ACTIVITY_STOPPED)
+                && e0.packageName == e1.packageName) {
+                val diff = e1.timeStamp - e0.timeStamp
+                if(apps.containsKey(e0.packageName)){
+                    Objects.requireNonNull(apps[e0.packageName])!!.duration += diff
                 }
             }
         }
-        // and return the map.
-        //return map
     }
     
 
-    fun getAllInstalledApplication(activity: FragmentActivity){
+    private fun getAllInstalledApplication(activity: FragmentActivity){
         val packageManager = activity.packageManager;
         val list = packageManager!!.getInstalledPackages(0)
         for (i in list.indices) {
@@ -111,22 +88,31 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
 
                 apps[appId] = AppUsage(appId,appName,Date(0),0,image)
-                Log.d("d--muax",appId)
-                /*
-                var tem = apps[appId]
-                if(tem==null){
-                    tem = AppUsage(appId,appName,Date(0),0, image)
-                }else{
-                    tem.seconds = 0
-                    tem.appName = appName
-                    tem.date = Date(0)
-                    tem.icon = byteArrayOf()
-                }
-                apps[appId] = tem
-                */
-                //insert(AppUsage(appId,appName, Date(0) ,0,image))
             }
         }
+    }
+
+    fun getLast24Hours(context: Context,activity: FragmentActivity){
+        getAllInstalledApplication(activity)
+
+        val startCalendar = Calendar.getInstance()
+        startCalendar.add(Calendar.HOUR, -24)
+        val endCalendar = Calendar.getInstance()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            queryUsageStatistics(
+                context,
+                startCalendar.timeInMillis,
+                endCalendar.timeInMillis
+            )
+        } else {
+            Toast
+                .makeText(context,
+                    "Min requirement Lollipop",
+                    Toast.LENGTH_LONG)
+                .show()
+        }
+        storeInDatabase()
     }
 
     init {

@@ -1,11 +1,13 @@
 package com.mua.overwatch
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.mua.overwatch.manager.PermissionManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,11 +18,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         init()
-        //startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+        if (!PermissionManager.checkAppUsagePermission(this)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+            }
+        }
     }
 
-    private fun init(){
-        navController = Navigation.findNavController(this,R.id.frag_empty)
+    private fun init() {
+        navController = Navigation.findNavController(this, R.id.frag_empty)
     }
 
 }

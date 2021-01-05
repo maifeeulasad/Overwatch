@@ -10,12 +10,11 @@ import com.mua.overwatch.converter.DateConverter;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.util.Calendar;
 
 @Entity(tableName = "app_usage")
 @TypeConverters(DateConverter.class)
 public class AppUsage {
+
     @NotNull
     @PrimaryKey
     @ColumnInfo(name = "app_id")
@@ -28,9 +27,9 @@ public class AppUsage {
     private Date date;
 
     @ColumnInfo(name = "duration")
-    private Long seconds;
+    private Long duration;
 
-    @ColumnInfo(name = "icon",typeAffinity = ColumnInfo.BLOB)
+    @ColumnInfo(name = "icon", typeAffinity = ColumnInfo.BLOB)
     private byte[] icon;
 
     @ColumnInfo(name = "count")
@@ -38,7 +37,7 @@ public class AppUsage {
 
     public AppUsage() {
         this.launchCount = 0;
-        this.seconds = 0L;
+        this.duration = 0L;
         //this.date = Calendar.getInstance().getTime();
     }
 
@@ -46,11 +45,11 @@ public class AppUsage {
         this.appId = appId;
     }
 
-    public AppUsage(String appId, String appName, Date date, Long seconds,byte[] icon) {
+    public AppUsage(String appId, String appName, Date date, Long duration, byte[] icon) {
         this.appId = appId;
         this.appName = appName;
         this.date = date;
-        this.seconds = seconds;
+        this.duration = duration;
         this.icon = icon;
     }
 
@@ -78,12 +77,12 @@ public class AppUsage {
         this.date = date;
     }
 
-    public Long getSeconds() {
-        return seconds;
+    public Long getDuration() {
+        return duration;
     }
 
-    public void setSeconds(Long seconds) {
-        this.seconds = seconds;
+    public void setDuration(Long duration) {
+        this.duration = duration;
     }
 
     public byte[] getIcon() {
