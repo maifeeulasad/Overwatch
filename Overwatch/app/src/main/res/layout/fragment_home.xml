@@ -18,12 +18,6 @@
         android:gravity="bottom"
         android:orientation="vertical"
         android:padding="20dp">
-
-        <Button
-            android:onClick="@{home.addRandom()}"
-            android:text="Insert"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
         
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_usage"
