@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -49,6 +52,19 @@ class HomeFragment : Fragment() {
         val appUsageRecyclerView: RecyclerView = mBinding.rvUsage
         appUsageRecyclerView.adapter = appUsageListAdapter
         appUsageRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
+
+
+        val items = arrayOf("Name", "Usage")
+        val adapter: ArrayAdapter<*> =
+            ArrayAdapter<Any?>(requireContext(), R.layout.support_simple_spinner_dropdown_item, items)
+        mBinding.spSort.adapter = adapter
+
+        mBinding.spSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+                appUsageListAdapter.sortBy(items[position])
+            }
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
 
         viewModel.getLast24Hours(requireContext(), requireActivity())
 

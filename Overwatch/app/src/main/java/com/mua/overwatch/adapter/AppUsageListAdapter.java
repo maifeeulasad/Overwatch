@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.util.StringUtil;
 
 import com.mua.overwatch.R;
 import com.mua.overwatch.entity.AppUsage;
@@ -18,6 +20,7 @@ import com.mua.overwatch.entity.AppUsage;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -71,6 +74,27 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
                                 appUsageList.get(position).getIcon().length)
         );
         holder.icon.setImageDrawable(icon);
+    }
+
+    public void sortBy(String by){
+        List<String> items = Arrays.asList("Name", "Usage");
+        if (by.equals(items.get(0))){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                appUsageList.sort((d1, d2) -> d1.getAppName().toLowerCase().compareTo(d2.getAppName().toLowerCase()));
+            }
+        } else if (by.equals(items.get(1))){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                appUsageList.sort((d1, d2) -> {
+                    if (d1.getDuration().equals(d2.getDuration()))
+                        return 0;
+                    else if (d1.getDuration() < d2.getDuration())
+                        return 1;
+                    else
+                        return -1;
+                });
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @Override
