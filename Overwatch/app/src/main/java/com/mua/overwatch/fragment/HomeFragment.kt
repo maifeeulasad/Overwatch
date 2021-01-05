@@ -2,6 +2,7 @@ package com.mua.overwatch.fragment
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +17,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mua.overwatch.R
 import com.mua.overwatch.adapter.AppUsageListAdapter
 import com.mua.overwatch.databinding.FragmentHomeBinding
+import com.mua.overwatch.entity.AppUsage
 import com.mua.overwatch.viewmodel.HomeViewModel
+import java.util.*
+import kotlin.collections.HashMap
 
 
 class HomeFragment : Fragment() {
@@ -42,13 +46,30 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
-        viewModel.getAllInstalledApplication(requireActivity())
+        //viewModel.getAllInstalledApplication(requireActivity())
+
+        val startCalendar = Calendar.getInstance()
+        startCalendar.add(Calendar.HOUR,-10)
+        val endCalendar = Calendar.getInstance()
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            context?.let { viewModel.getUsage(it) }
+            //val res = viewModel.getUsageStatistics(requireContext())
+
+            val result = viewModel.queryUsageStatistics(
+                    requireContext(),
+                    startCalendar.getTimeInMillis(),
+                    endCalendar.getTimeInMillis())
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                result!!.forEach { t, u ->
+                    Log.d("d--mua--l",t)
+                    Log.d("d--mua--l",u!!.seconds.toString())
+                }
+            }
+
+        } else {
+            TODO("VERSION.SDK_INT < LOLLIPOP")
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            viewModel.mapToDatabase()
-        }
+
     }
 
 

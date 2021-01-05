@@ -33,8 +33,17 @@ public class AppUsage {
     @ColumnInfo(name = "icon",typeAffinity = ColumnInfo.BLOB)
     private byte[] icon;
 
+    @ColumnInfo(name = "count")
+    private Integer launchCount;
+
     public AppUsage() {
+        this.launchCount = 0;
+        this.seconds = 0L;
         //this.date = Calendar.getInstance().getTime();
+    }
+
+    public AppUsage(String appId) {
+        this.appId = appId;
     }
 
     public AppUsage(String appId, String appName, Date date, Long seconds,byte[] icon) {
@@ -83,5 +92,13 @@ public class AppUsage {
 
     public void setIcon(byte[] icon) {
         this.icon = icon;
+    }
+
+    public Integer getLaunchCount() {
+        return launchCount;
+    }
+
+    public void setLaunchCount(Integer launchCount) {
+        this.launchCount = launchCount;
     }
 }
