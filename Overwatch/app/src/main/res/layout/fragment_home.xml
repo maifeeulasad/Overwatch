@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="empty"
-            type="com.mua.overwatch.viewmodel.EmptyViewModel" />
+            name="home"
+            type="com.mua.overwatch.viewmodel.HomeViewModel" />
 
     </data>
 
@@ -18,8 +18,15 @@
         android:gravity="bottom"
         android:orientation="vertical"
         android:padding="20dp">
-        <TextView
-            android:text="Home"
+
+        <Button
+            android:onClick="@{home.addRandom()}"
+            android:text="Insert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_usage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
