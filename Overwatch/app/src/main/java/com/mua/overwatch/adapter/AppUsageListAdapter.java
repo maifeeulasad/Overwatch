@@ -1,8 +1,13 @@
 package com.mua.overwatch.adapter;
 
+import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,14 +19,22 @@ import java.util.List;
 
 public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapter.AppUsageListViewHolder> {
     private List<AppUsage> appUsageList;
+    private Context context;
+
+    public AppUsageListAdapter(Context context) {
+        this.context = context;
+    }
 
     protected class AppUsageListViewHolder extends RecyclerView.ViewHolder {
-        private TextView name, duration;
+        private TextView name;
+        private TextView duration;
+        private ImageView icon;
 
         AppUsageListViewHolder(View view) {
             super(view);
             name = view.findViewById(R.id.tv_item_app_usage_name);
             duration = view.findViewById(R.id.tv_item_app_usage_duration);
+            icon = view.findViewById(R.id.iv_item_app_usage_icon);
         }
     }
 
@@ -34,8 +47,15 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
     @Override
     public void onBindViewHolder(AppUsageListViewHolder holder, int position) {
         try {
-            holder.name.setText("Name: " + appUsageList.get(position).getAppName());
-            holder.duration.setText("Address: " + appUsageList.get(position).getSeconds());
+            holder.name.setText(appUsageList.get(position).getAppName());
+            holder.duration.setText(appUsageList.get(position).getSeconds().toString());
+            Drawable icon = new BitmapDrawable(context.getResources(),
+                    BitmapFactory
+                            .decodeByteArray(appUsageList.get(position).getIcon(),
+                                    0,
+                                    appUsageList.get(position).getIcon().length)
+            );
+            holder.icon.setImageDrawable(icon);
         }
         catch(Exception ignored) {
 

@@ -1,6 +1,8 @@
 package com.mua.overwatch.fragment
 
 import android.content.pm.ApplicationInfo
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +21,7 @@ import com.mua.overwatch.adapter.AppUsageListAdapter
 import com.mua.overwatch.databinding.FragmentHomeBinding
 import com.mua.overwatch.entity.AppUsage
 import com.mua.overwatch.viewmodel.HomeViewModel
+import java.io.ByteArrayOutputStream
 import java.sql.Date
 
 
@@ -55,20 +58,27 @@ class HomeFragment : Fragment() {
             val packageInfo = list[i]
             if (packageInfo!!.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM == 0) {
                 val appName = packageInfo.applicationInfo.loadLabel(packageManager).toString()
+                val appDrawable = packageInfo.applicationInfo.loadIcon(packageManager)
                 val appId = packageInfo.packageName
-                viewModel.insert(AppUsage(appId,appName, Date(0),0))
+
+                val bitmap = (appDrawable as BitmapDrawable).getBitmap()
+                val stream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                val image = stream.toByteArray()
+
+                viewModel.insert(AppUsage(appId,appName, Date(0),0,image))
             }
         }
     }
 
     private fun init(){
-        appUsageListAdapter = AppUsageListAdapter()
+        appUsageListAdapter = AppUsageListAdapter(context)
         val appUsageRecyclerView: RecyclerView = mBinding.rvUsage
         appUsageRecyclerView.adapter = appUsageListAdapter
         appUsageRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
 
         viewModel.appUsageList.observe(mBinding.lifecycleOwner!!, Observer {
-            Toast.makeText(requireContext(),"List has been Updated" + it.size,Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(),"List has been Updated : " + it.size,Toast.LENGTH_LONG).show()
             appUsageListAdapter.setAppUsages(it)
         })
     }

@@ -30,15 +30,19 @@ public class AppUsage {
     @ColumnInfo(name = "duration")
     private Long seconds;
 
+    @ColumnInfo(name = "icon",typeAffinity = ColumnInfo.BLOB)
+    private byte[] icon;
+
     public AppUsage() {
         //this.date = Calendar.getInstance().getTime();
     }
 
-    public AppUsage(String appId, String appName, Date date, Long seconds) {
+    public AppUsage(String appId, String appName, Date date, Long seconds,byte[] icon) {
         this.appId = appId;
         this.appName = appName;
         this.date = date;
         this.seconds = seconds;
+        this.icon = icon;
     }
 
     public String getAppId() {
@@ -71,5 +75,13 @@ public class AppUsage {
 
     public void setSeconds(Long seconds) {
         this.seconds = seconds;
+    }
+
+    public byte[] getIcon() {
+        return icon;
+    }
+
+    public void setIcon(byte[] icon) {
+        this.icon = icon;
     }
 }
