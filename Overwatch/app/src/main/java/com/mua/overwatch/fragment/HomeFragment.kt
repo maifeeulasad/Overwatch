@@ -1,6 +1,8 @@
 package com.mua.overwatch.fragment
 
+import android.content.pm.ApplicationInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +17,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mua.overwatch.R
 import com.mua.overwatch.adapter.AppUsageListAdapter
 import com.mua.overwatch.databinding.FragmentHomeBinding
+import com.mua.overwatch.entity.AppUsage
 import com.mua.overwatch.viewmodel.HomeViewModel
+import java.sql.Date
 
 
 class HomeFragment : Fragment() {
@@ -41,6 +45,20 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
+        getAllInstalledApplication()
+    }
+
+    private fun getAllInstalledApplication(){
+        val packageManager = requireActivity().packageManager;
+        val list = packageManager!!.getInstalledPackages(0)
+        for (i in list.indices) {
+            val packageInfo = list[i]
+            if (packageInfo!!.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM == 0) {
+                val appName = packageInfo.applicationInfo.loadLabel(packageManager).toString()
+                val appId = packageInfo.packageName
+                viewModel.insert(AppUsage(appId,appName, Date(0),0))
+            }
+        }
     }
 
     private fun init(){

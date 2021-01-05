@@ -16,12 +16,12 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
     private List<AppUsage> appUsageList;
 
     protected class AppUsageListViewHolder extends RecyclerView.ViewHolder {
-        private TextView rowAppUsageTxt0, rowAppUsageTxt1;
+        private TextView name, duration;
 
         AppUsageListViewHolder(View view) {
             super(view);
-            rowAppUsageTxt0 = view.findViewById(R.id.tv_item_app_usage_name);
-            rowAppUsageTxt1 = view.findViewById(R.id.tv_item_app_usage_duration);
+            name = view.findViewById(R.id.tv_item_app_usage_name);
+            duration = view.findViewById(R.id.tv_item_app_usage_duration);
         }
     }
 
@@ -34,10 +34,10 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
     @Override
     public void onBindViewHolder(AppUsageListViewHolder holder, int position) {
         try {
-            holder.rowAppUsageTxt0.setText("Name: " + appUsageList.get(position).getApp_name());
-            holder.rowAppUsageTxt1.setText("Address: " + appUsageList.get(position).getSeconds());
+            holder.name.setText("Name: " + appUsageList.get(position).getAppName());
+            holder.duration.setText("Address: " + appUsageList.get(position).getSeconds());
         }
-        catch(NullPointerException n) {
+        catch(Exception ignored) {
 
         }
     }

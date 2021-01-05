@@ -7,6 +7,8 @@ import androidx.room.TypeConverters;
 
 import com.mua.overwatch.converter.DateConverter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -14,12 +16,13 @@ import java.util.Calendar;
 @Entity(tableName = "app_usage")
 @TypeConverters(DateConverter.class)
 public class AppUsage {
-    @PrimaryKey(autoGenerate = true)
+    @NotNull
+    @PrimaryKey
     @ColumnInfo(name = "app_id")
-    private int appId;
+    private String appId;
 
     @ColumnInfo(name = "app_name")
-    private String app_name;
+    private String appName;
 
     @ColumnInfo(name = "date")
     private Date date;
@@ -31,27 +34,27 @@ public class AppUsage {
         //this.date = Calendar.getInstance().getTime();
     }
 
-    public AppUsage(int appId, String app_name, Date date, Long seconds) {
+    public AppUsage(String appId, String appName, Date date, Long seconds) {
         this.appId = appId;
-        this.app_name = app_name;
+        this.appName = appName;
         this.date = date;
         this.seconds = seconds;
     }
 
-    public int getAppId() {
+    public String getAppId() {
         return appId;
     }
 
-    public void setAppId(int appId) {
+    public void setAppId(String appId) {
         this.appId = appId;
     }
 
-    public String getApp_name() {
-        return app_name;
+    public String getAppName() {
+        return appName;
     }
 
-    public void setApp_name(String app_name) {
-        this.app_name = app_name;
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 
     public Date getDate() {
