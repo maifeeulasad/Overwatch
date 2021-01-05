@@ -96,7 +96,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         getAllInstalledApplication(activity)
 
         val startCalendar = Calendar.getInstance()
-        startCalendar.add(Calendar.HOUR, -24)
+        startCalendar.set(Calendar.SECOND,0)
+        startCalendar.set(Calendar.MINUTE,0)
+        startCalendar.set(Calendar.HOUR,0)
         val endCalendar = Calendar.getInstance()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

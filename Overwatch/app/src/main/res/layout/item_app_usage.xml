@@ -41,7 +41,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Name : "
-                    android:textSize="26sp"
                     android:textStyle="bold" />
 
 
@@ -49,8 +48,7 @@
                     android:id="@+id/tv_item_app_usage_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="26sp" />
+                    android:layout_weight="1"/>
 
             </TableRow>
 
@@ -63,15 +61,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Duration : "
-                    android:textSize="22sp" />
+                    android:text="Duration : "/>
 
                 <TextView
                     android:id="@+id/tv_item_app_usage_duration"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textSize="22sp" />
+                    android:layout_weight="1" />
 
             </TableRow>
 
