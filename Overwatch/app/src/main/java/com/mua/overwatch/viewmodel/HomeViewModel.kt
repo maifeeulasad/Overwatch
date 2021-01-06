@@ -13,7 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import com.mua.overwatch.entity.AppUsage
+import com.mua.overwatch.entity.PackageUsage
 import com.mua.overwatch.repository.AppUsageRepository
 import java.io.ByteArrayOutputStream
 import java.sql.Date
@@ -23,11 +23,11 @@ import kotlin.collections.ArrayList
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val appUsageRepository: AppUsageRepository = AppUsageRepository(application)
-    val appUsageList: LiveData<List<AppUsage>>
-    val apps: MutableMap<String,AppUsage> = HashMap()
+    val packageUsageList: LiveData<List<PackageUsage>>
+    val apps: MutableMap<String, PackageUsage> = HashMap()
 
-    private fun insert(appUsage: AppUsage?) {
-        appUsageRepository.insert(appUsage)
+    private fun insert(packageUsage: PackageUsage?) {
+        appUsageRepository.insert(packageUsage)
     }
 
 
@@ -87,7 +87,13 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                 val image = stream.toByteArray()
 
 
-                apps[appId] = AppUsage(appId,appName,Date(0),0,image)
+                apps[appId] = PackageUsage(
+                    appId,
+                    appName,
+                    Date(0),
+                    0,
+                    image
+                )
             }
         }
     }
@@ -118,7 +124,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     init {
-        appUsageList = appUsageRepository.appUsageList
+        packageUsageList = appUsageRepository.appUsageList
     }
     
 }

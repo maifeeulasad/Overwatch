@@ -12,10 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.util.StringUtil;
 
 import com.mua.overwatch.R;
-import com.mua.overwatch.entity.AppUsage;
+import com.mua.overwatch.entity.PackageUsage;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +24,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapter.AppUsageListViewHolder> {
-    private List<AppUsage> appUsageList = new ArrayList<>();
+    private List<PackageUsage> packageUsageList = new ArrayList<>();
     private final Context context;
 
     private int sortDirection = 1;
@@ -57,8 +56,8 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
 
     @Override
     public void onBindViewHolder(@NotNull AppUsageListViewHolder holder, int position) {
-        holder.name.setText(appUsageList.get(position).getAppName());
-        long millis = appUsageList.get(position).getDuration();
+        holder.name.setText(packageUsageList.get(position).getPackageName());
+        long millis = packageUsageList.get(position).getDuration();
         long hours = TimeUnit.MILLISECONDS.toHours(millis);
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(
                 TimeUnit.MILLISECONDS.toHours(millis)
@@ -72,9 +71,9 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
         holder.duration.setText(duration);
         Drawable icon = new BitmapDrawable(context.getResources(),
                 BitmapFactory
-                        .decodeByteArray(appUsageList.get(position).getIcon(),
+                        .decodeByteArray(packageUsageList.get(position).getIcon(),
                                 0,
-                                appUsageList.get(position).getIcon().length)
+                                packageUsageList.get(position).getIcon().length)
         );
         holder.icon.setImageDrawable(icon);
     }
@@ -89,12 +88,12 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
         List<String> items = Arrays.asList("Name", "Usage");
         if (by.equals(items.get(0))){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                appUsageList.sort((d1, d2) ->
-                        sortDirection * d1.getAppName().toLowerCase().compareTo(d2.getAppName().toLowerCase()));
+                packageUsageList.sort((d1, d2) ->
+                        sortDirection * d1.getPackageName().toLowerCase().compareTo(d2.getPackageName().toLowerCase()));
             }
         } else if (by.equals(items.get(1))){
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                appUsageList.sort((d1, d2) -> {
+                packageUsageList.sort((d1, d2) -> {
                     if (d1.getDuration().equals(d2.getDuration()))
                         return 0;
                     else if (d1.getDuration() < d2.getDuration())
@@ -109,11 +108,11 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
 
     @Override
     public int getItemCount() {
-        return appUsageList.size();
+        return packageUsageList.size();
     }
 
-    public void setAppUsages(List<AppUsage> appUsageList) {
-        this.appUsageList = appUsageList;
+    public void setAppUsages(List<PackageUsage> packageUsageList) {
+        this.packageUsageList = packageUsageList;
         notifyDataSetChanged();
     }
 }

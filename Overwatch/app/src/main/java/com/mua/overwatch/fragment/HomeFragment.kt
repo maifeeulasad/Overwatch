@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -53,6 +54,11 @@ class HomeFragment : Fragment() {
         appUsageRecyclerView.adapter = appUsageListAdapter
         appUsageRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
 
+        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+        //requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+
+        mBinding.dlHome.open()
+
 
         val items = arrayOf("Name", "Usage")
         val adapter: ArrayAdapter<*> =
@@ -72,7 +78,7 @@ class HomeFragment : Fragment() {
 
         viewModel.getLast24Hours(requireContext(), requireActivity())
 
-        viewModel.appUsageList.observe(mBinding.lifecycleOwner!!, Observer {
+        viewModel.packageUsageList.observe(mBinding.lifecycleOwner!!, Observer {
             appUsageListAdapter.setAppUsages(it)
         })
     }

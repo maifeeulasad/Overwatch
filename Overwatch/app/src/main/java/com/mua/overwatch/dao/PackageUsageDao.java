@@ -6,16 +6,16 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.mua.overwatch.entity.AppUsage;
+import com.mua.overwatch.entity.PackageUsage;
 
 import java.util.List;
 
 @Dao
-public interface AppUsageDao {
+public interface PackageUsageDao {
 
-    @Query("SELECT * FROM APP_USAGE")
-    LiveData<List<AppUsage>> getAll();
+    @Query("SELECT * FROM PACKAGE_USAGE")
+    LiveData<List<PackageUsage>> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(AppUsage appUsage);
+    void insert(PackageUsage packageUsage);
 }

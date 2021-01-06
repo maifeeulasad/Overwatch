@@ -13,7 +13,7 @@
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+        android:id="@+id/dl_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
@@ -47,13 +47,13 @@
                 <androidx.appcompat.widget.AppCompatSpinner
                     android:id="@+id/sp_sort"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="2" />
 
                 <ImageButton
                     android:id="@+id/ib_sort_direction"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:background="@drawable/sort_direction"
                     android:paddingEnd="5dp"
                     android:paddingRight="5dp"
@@ -72,7 +72,6 @@
 
 
         <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigation_drawer"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
