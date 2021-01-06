@@ -120,7 +120,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     Toast.LENGTH_LONG)
                 .show()
         }
-        storeInDatabase()
+        //storeInDatabase()
     }
 
     init {

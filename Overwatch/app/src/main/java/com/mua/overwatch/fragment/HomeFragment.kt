@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -54,7 +52,7 @@ class HomeFragment : Fragment() {
         appUsageRecyclerView.adapter = appUsageListAdapter
         appUsageRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
 
-        (activity as AppCompatActivity?)!!.supportActionBar!!.hide()
+        //(activity as AppCompatActivity?)!!.supportActionBar!!.hide()
         //requireActivity().window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
 
         mBinding.dlHome.open()
@@ -62,13 +60,23 @@ class HomeFragment : Fragment() {
 
         val items = arrayOf("Name", "Usage")
         val adapter: ArrayAdapter<*> =
-            ArrayAdapter<Any?>(requireContext(), R.layout.support_simple_spinner_dropdown_item, items)
+            ArrayAdapter<Any?>(
+                requireContext(),
+                R.layout.support_simple_spinner_dropdown_item,
+                items
+            )
         mBinding.spSort.adapter = adapter
 
-        mBinding.spSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
+        mBinding.spSort.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View,
+                position: Int,
+                id: Long
+            ) {
                 appUsageListAdapter.sortBy(items[position])
             }
+
             override fun onNothingSelected(parent: AdapterView<*>) {}
         }
 
