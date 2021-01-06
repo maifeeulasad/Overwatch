@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebView
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
@@ -98,12 +100,35 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
         if(item.itemId==R.id.menu_home_history){
             val navController = Navigation.findNavController(requireActivity(),R.id.frag_empty)
             navController.navigate(R.id.nav_frag_history)
+            return true;
         }else if(item.itemId==R.id.menu_home_info){
-
+            return showInfo()
         }else if(item.itemId==R.id.menu_home_setting){
 
         }
         return false
+    }
+
+    fun showInfo(): Boolean{
+        val msg = WebView(requireContext())
+        msg.loadData(
+            "<head>\n" +
+                    "<style>\n" +
+                    "p {text-align: center;}\n" +
+                    "</style>\n" +
+                    "</head>" +
+                    "<p>Just another Android application by MUA</p>"+
+                    "<p>To monitor productivity</p>" +
+                    "<p>Source code : <a href=\"https://github.com/maifeeulasad/Overwatch/\">GitHub@maifeeulasad</a></p>",
+            "text/html; charset=utf-8", "UTF-8"
+        )
+
+        val dialog = AlertDialog.Builder(requireContext())
+        dialog.setTitle("Overwatch")
+        dialog.setView(msg)
+        dialog.setCancelable(true)
+        dialog.create().show()
+        return true
     }
 
 }
