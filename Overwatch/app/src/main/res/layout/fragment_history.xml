@@ -12,40 +12,13 @@
 
     </data>
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/dl_history"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_day_usage"
+        android:padding="20dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:foregroundGravity="bottom"
-            android:gravity="bottom"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_day_usage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
-
-
-        <!--
-        <com.google.android.material.navigation.NavigationView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="@android:color/white"
-            app:menu="@menu/menu_home" />
-        -->
-
-
-    </androidx.drawerlayout.widget.DrawerLayout>
 
 
 </layout>

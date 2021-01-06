@@ -6,6 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import com.mua.overwatch.dao.DayUsageDao;
 import com.mua.overwatch.dao.PackageUsageDao;
 import com.mua.overwatch.entity.DayUsage;
 import com.mua.overwatch.entity.PackageUsage;
@@ -15,6 +16,7 @@ public abstract class ApplicationDatabase extends RoomDatabase {
     private static volatile ApplicationDatabase INSTANCE;
 
     public abstract PackageUsageDao appUsageDao();
+    public abstract DayUsageDao dayUsageDao();
 
     public static ApplicationDatabase getInstance(Context context) {
         if(INSTANCE == null) {

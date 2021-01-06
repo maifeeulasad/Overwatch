@@ -24,7 +24,7 @@ import com.mua.overwatch.viewmodel.HistoryViewModel
 import com.mua.overwatch.viewmodel.HomeViewModel
 
 
-class HistoryFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener {
+class HistoryFragment : Fragment() {
 
     private lateinit var viewModel: HistoryViewModel
     private lateinit var mBinding: FragmentHistoryBinding
@@ -58,19 +58,9 @@ class HistoryFragment : Fragment(), NavigationView.OnNavigationItemSelectedListe
         appUsageRecyclerView.layoutManager = LinearLayoutManager(requireActivity())
 
 
-        mBinding.dlHistory.open()
-
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        if(item.itemId==R.id.menu_home_history){
-
-        }else if(item.itemId==R.id.menu_home_info){
-
-        }else if(item.itemId==R.id.menu_home_setting){
-
-        }
-        return false
+        viewModel.dayUsageList.observe(mBinding.lifecycleOwner!!, Observer {
+            appUsageListAdapter.setAppUsages(it)
+        })
     }
 
 }

@@ -128,6 +128,7 @@ class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener
         dialog.setView(msg)
         dialog.setCancelable(true)
         dialog.create().show()
+        mBinding.dlHome.close()
         return true
     }
 
