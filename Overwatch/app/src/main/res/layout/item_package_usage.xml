@@ -17,7 +17,7 @@
         <ImageView
             android:layout_margin="4dp"
             android:layout_gravity="center"
-            android:id="@+id/iv_item_app_usage_icon"
+            android:id="@+id/iv_item_package_usage_icon"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:contentDescription="Application Icon" />
@@ -45,7 +45,7 @@
 
 
                 <TextView
-                    android:id="@+id/tv_item_app_usage_name"
+                    android:id="@+id/tv_item_package_usage_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"/>
@@ -64,7 +64,7 @@
                     android:text="Duration : "/>
 
                 <TextView
-                    android:id="@+id/tv_item_app_usage_duration"
+                    android:id="@+id/tv_item_package_usage_duration"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />

@@ -2,6 +2,7 @@ package com.mua.overwatch.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
@@ -11,15 +12,17 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
 import com.mua.overwatch.R
 import com.mua.overwatch.adapter.AppUsageListAdapter
 import com.mua.overwatch.databinding.FragmentHomeBinding
 import com.mua.overwatch.viewmodel.HomeViewModel
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var viewModel: HomeViewModel
     private lateinit var mBinding: FragmentHomeBinding
@@ -57,6 +60,7 @@ class HomeFragment : Fragment() {
 
         mBinding.dlHome.open()
 
+        mBinding.nvHome.setNavigationItemSelectedListener(this)
 
         val items = arrayOf("Name", "Usage")
         val adapter: ArrayAdapter<*> =
@@ -72,8 +76,7 @@ class HomeFragment : Fragment() {
                 parent: AdapterView<*>,
                 view: View,
                 position: Int,
-                id: Long
-            ) {
+                id: Long) {
                 appUsageListAdapter.sortBy(items[position])
             }
 
@@ -89,6 +92,18 @@ class HomeFragment : Fragment() {
         viewModel.packageUsageList.observe(mBinding.lifecycleOwner!!, Observer {
             appUsageListAdapter.setAppUsages(it)
         })
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        if(item.itemId==R.id.menu_home_history){
+            val navController = Navigation.findNavController(requireActivity(),R.id.frag_empty)
+            navController.navigate(R.id.nav_frag_history)
+        }else if(item.itemId==R.id.menu_home_info){
+
+        }else if(item.itemId==R.id.menu_home_setting){
+
+        }
+        return false
     }
 
 }

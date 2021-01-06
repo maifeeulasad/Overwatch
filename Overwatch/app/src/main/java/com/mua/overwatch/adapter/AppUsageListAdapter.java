@@ -41,9 +41,9 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
 
         AppUsageListViewHolder(View view) {
             super(view);
-            name = view.findViewById(R.id.tv_item_app_usage_name);
-            duration = view.findViewById(R.id.tv_item_app_usage_duration);
-            icon = view.findViewById(R.id.iv_item_app_usage_icon);
+            name = view.findViewById(R.id.tv_item_package_usage_name);
+            duration = view.findViewById(R.id.tv_item_package_usage_duration);
+            icon = view.findViewById(R.id.iv_item_package_usage_icon);
         }
     }
 
@@ -51,7 +51,7 @@ public class AppUsageListAdapter extends RecyclerView.Adapter<AppUsageListAdapte
     @Override
     public AppUsageListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new AppUsageListViewHolder((LayoutInflater.from(parent.getContext()))
-                .inflate(R.layout.item_app_usage, parent, false));
+                .inflate(R.layout.item_package_usage, parent, false));
     }
 
     @Override

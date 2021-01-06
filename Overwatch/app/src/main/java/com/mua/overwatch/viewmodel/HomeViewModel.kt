@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.mua.overwatch.entity.PackageUsage
 import com.mua.overwatch.repository.AppUsageRepository
 import java.io.ByteArrayOutputStream
@@ -23,7 +24,7 @@ import kotlin.collections.ArrayList
 
 class HomeViewModel(application: Application) : AndroidViewModel(application) {
     private val appUsageRepository: AppUsageRepository = AppUsageRepository(application)
-    val packageUsageList: LiveData<List<PackageUsage>>
+    val packageUsageList: LiveData<MutableList<PackageUsage>>
     val apps: MutableMap<String, PackageUsage> = HashMap()
 
     private fun insert(packageUsage: PackageUsage?) {
@@ -32,8 +33,9 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
 
     private fun storeInDatabase(){
+        packageUsageList.value!!.clear()
         for(entry in apps){
-            insert(entry.value)
+            packageUsageList.value!!.add(entry.value)
         }
     }
 
@@ -120,11 +122,12 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
                     Toast.LENGTH_LONG)
                 .show()
         }
-        //storeInDatabase()
+        storeInDatabase()
     }
 
     init {
-        packageUsageList = appUsageRepository.appUsageList
+        packageUsageList = MutableLiveData(mutableListOf())
+        //packageUsageList = appUsageRepository.appUsageList
     }
     
 }

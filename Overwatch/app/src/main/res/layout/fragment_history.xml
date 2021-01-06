@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".fragment.HistoryFragment">
+
+    <data>
+
+        <variable
+            name="history"
+            type="com.mua.overwatch.viewmodel.HistoryViewModel" />
+
+    </data>
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/dl_history"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foregroundGravity="bottom"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_day_usage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+
+        <!--
+        <com.google.android.material.navigation.NavigationView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@android:color/white"
+            app:menu="@menu/menu_home" />
+        -->
+
+
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+
+</layout>
